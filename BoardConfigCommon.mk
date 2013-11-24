@@ -27,7 +27,7 @@ TARGET_SPECIFIC_HEADER_PATH := device/samsung/jf-common/include
 
 # Kernel
 TARGET_KERNEL_SOURCE         := kernel/samsung/jf
-BOARD_KERNEL_CMDLINE         := androidboot.hardware=qcom user_debug=31 zcache
+BOARD_KERNEL_CMDLINE         := androidboot.hardware=qcom user_debug=31 zcache androidboot.selinux=permissive
 BOARD_KERNEL_BASE            := 0x80200000
 BOARD_MKBOOTIMG_ARGS         := --ramdisk_offset 0x02000000
 BOARD_KERNEL_PAGESIZE        := 2048
@@ -81,37 +81,21 @@ BOARD_USES_SEPERATED_VOIP := true
 # Use seperate devices for 3-pole headset
 BOARD_USES_SEPERATED_HEADSET_MIC := true
 
+# Use device specific camera
+USE_DEVICE_SPECIFIC_CAMERA := true
+
+# VectorImpl Symbols required for legacy HALs
+COMMON_GLOBAL_CFLAGS += -DNEEDS_VECTORIMPL_SYMBOLS
+
 # SELinux
+TARGET_USE_SELINUX := false
+ifneq ($(TARGET_USE_SELINUX),false)
 BOARD_SEPOLICY_DIRS += \
         device/samsung/jf-common/sepolicy
 
-BOARD_SEPOLICY_UNION += \
-	file_contexts \
-	property_contexts \
-	te_macros \
-        bluetooth_loader.te \
-	bridge.te \
-	camera.te \
-	conn_init.te \
-	device.te \
-	dhcp.te \
-	domain.te \
-	drmserver.te \
-	file.te \
-	kickstart.te \
-	init.te \
-	mediaserver.te \
-	mpdecision.te \
-	netmgrd.te \
-	property.te \
-	qmux.te \
-	rild.te \
-	rmt.te \
-	sensors.te \
-	surfaceflinger.te \
-	system.te \
-	tee.te \
-	thermald.te \
-	ueventd.te \
-	wpa_supplicant.te
-
+# The list below is order dependent
+BOARD_SEPOLICY_UNION := \
+       device.te \
+       app.te \
+       file_contexts
+endif

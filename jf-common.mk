@@ -16,8 +16,8 @@
 
 $(call inherit-product, $(SRC_TARGET_DIR)/product/languages_full.mk)
 
-## (2) Also get non-open-source specific aspects if available
-$(call inherit-product-if-exists, vendor/samsung/jf-common/jf-common-vendor.mk)
+## Get non-open-source specific aspects
+$(call inherit-product, vendor/samsung/jf-common/jf-common-vendor.mk)
 
 ## overlays
 DEVICE_PACKAGE_OVERLAYS += device/samsung/jf-common/overlay
@@ -29,10 +29,6 @@ PRODUCT_AAPT_PREF_CONFIG := xxhdpi
 # Boot animation
 TARGET_SCREEN_HEIGHT := 1920
 TARGET_SCREEN_WIDTH := 1080
-
-# Expose Irda feature
-PRODUCT_COPY_FILES += \
-    device/samsung/jf-common/etc/com.sec.feature.irda_service.xml:system/etc/permissions/com.sec.feature.irda_service.xml
 
 # Audio configuration
 PRODUCT_COPY_FILES += \
@@ -75,6 +71,7 @@ PRODUCT_PACKAGES += \
     init.carrier.rc \
     init.qcom.rc \
     init.qcom.usb.rc \
+	init.ril.rc \
     init.target.rc \
     ueventd.qcom.rc
 
@@ -111,9 +108,6 @@ PRODUCT_PACKAGES += lights.msm8960
 # Charging LED property
 PRODUCT_PROPERTY_OVERRIDES += \
     persist.sys.enable-charging-led=0
-
-# Irda
-PRODUCT_PACKAGES += irda.msm8960
 
 # QC Perf
 PRODUCT_PROPERTY_OVERRIDES += \
